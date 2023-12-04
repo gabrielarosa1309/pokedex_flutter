@@ -28,8 +28,8 @@ class PokeList extends StatefulWidget {
 }
 
 class _PokeListState extends State<PokeList> {
-  TextEditingController _controller = TextEditingController();
-  Map<String, dynamic>? pokemonData;
+  TextEditingController _controller = TextEditingController(); //Controller pro input
+  Map<String, dynamic>? pokemonData; //Map em que ficam as infos do pokemon
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +73,16 @@ class _PokeListState extends State<PokeList> {
       ),
     );
 }
-  //FUNÇÃO QUE BUSCA O POKEMON NA API
+  //FUNÇÃO QUE BUSCA AS INFOS DO POKEMON NA API
   Future<void> searchPokemon(String pokemonName) async {
     final response =
     await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon/$pokemonName'));
 
-    //VALIDA: SE O POKEMON FOI ENCONTRADO, ENTÃO ELE ME MOSTRA AS INFOS
+    //VALIDA: SE O POKEMON FOI ENCONTRADO
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
+        //Atualiza as infos que eu escolhi do pokémon puxando os dados da API
         pokemonData = {
           'name': data['name'],
           'id': data['id'],
@@ -90,10 +91,12 @@ class _PokeListState extends State<PokeList> {
         };
       });
     } else {
-      //CASO ELE NÃO ENCONTRE, ELE MOSTRA UMA CAIXA DE DIALOGO INDICANDO O ERRO AO USUARIO
+      //CASO ELE NÃO ENCONTRE
       setState(() {
+        //Aqui ele define os dados do pokemon como nulo se não der certo a pesquisa
         pokemonData = null;
       });
+      //E aqui exibe uma caixinha mostrando o erro
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
